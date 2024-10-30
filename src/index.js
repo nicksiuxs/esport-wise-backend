@@ -12,7 +12,7 @@ const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: 'root',
-    database: 'almacen'
+    database: 'esport_wise'
 });
 
 
