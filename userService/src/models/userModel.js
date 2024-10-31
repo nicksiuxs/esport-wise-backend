@@ -22,4 +22,15 @@ async function getUsers() {
     return result[0];
 }
 
-module.exports = { getUsers };
+/**
+ * Retrieves a user from the database by their ID.
+ * @function getUserById
+ * @param {number} id - The ID of the user to retrieve.
+ * @returns {Promise<Object>} A promise that resolves to the user object.
+ */
+async function getUserById(id) {
+    const result = await connection.query('SELECT * FROM users WHERE id = ?', id);
+    return result[0];
+}
+
+module.exports = { getUsers, getUserById };
