@@ -4,12 +4,13 @@
   "description": "backend for easport wise app",
   "main": "index.js",
   "scripts": {
-    "start": "node stc/index.js",
-    "dev": "nodemon src/index.js"
+    "start-users": "node userService/src/index.js",
+    "dev-users": "nodemon userService/src/index.js"
   },
   "author": "nicksiuxs",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
