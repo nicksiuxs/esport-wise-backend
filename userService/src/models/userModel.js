@@ -57,4 +57,28 @@ async function createUser(user) {
     return rows[0];
 }
 
-module.exports = { getUsers, getUserById, createUser };
+/**
+ * Updates a user in the database and returns the updated user.
+ * @param {Object} updatedUser - The user data to update.
+ * @param {string} updatedUser.name - The user's first name.
+ * @param {string} updatedUser.lastname - The user's last name.
+ * @param {string} updatedUser.birthdate - The user's birthdate.
+ * @param {string} updatedUser.email - The user's email address.
+ * @param {string} updatedUser.username - The user's username.
+ * @param {string} updatedUser.password - The user's password.
+ * @param {number} updatedUser.role_id - The user's role ID.
+ * @param {number} id - The ID of the user to update.
+ * @returns {Promise<Object>} The updated user.
+ */
+async function updateUser(updatedUser, id) {
+    const [result] = await connection.query(
+        'UPDATE users SET name=?, lastname=?, birthdate=?, email=?, username=?, password=?, role_id=? WHERE id=?',
+        [updatedUser.name, updatedUser.lastname, updatedUser.birthdate, updatedUser.email, updatedUser.username, updatedUser.password, updatedUser.role_id, id]
+    );
+
+    const [rows] = await connection.query('SELECT * FROM users WHERE id = ?', [id]);
+
+    return rows[0];
+}
+
+module.exports = { getUsers, getUserById, createUser, updateUser };

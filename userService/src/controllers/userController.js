@@ -23,32 +23,15 @@ router.post('/user', async (req, res) => {
     res.json(result);
 });
 
-// // // CREATE user
-// router.post('/user', async (req, res) => {
-//     const conn = await pool.getConnection();
-//     const [result] = await conn.query(
-//         'INSERT INTO Users (username, fullname, email, password_hash, role_id) VALUES (?, ?, ?, ?, ?)',
-//         [req.body.username, req.body.fullname, req.body.email, req.body.password_hash, req.body.role_id]
-//     );
-//     const [rows] = await conn.query('SELECT * FROM Users WHERE user_id = ?', [result.insertId]);
-//     conn.release();
-//     res.json(rows[0]);
-// });
+// PUT update user
+router.put('/user/:id', async (req, res) => {
+    const result = await userModel.updateUser(req.body, req.params.id);
+    if (!result) {
+        return res.status(404).send('Usuario no encontrado');
+    }
+    res.json(result);
+});
 
-// // UPDATE user by id
-// router.put('/user/:id', async (req, res) => {
-//     const conn = await pool.getConnection();
-//     const [result] = await conn.query(
-//         'UPDATE Users SET username=?, fullname=?, email=?, password_hash=?, role_id=? WHERE user_id=?',
-//         [req.body.username, req.body.fullname, req.body.email, req.body.password_hash, req.body.role_id, req.params.id]
-//     );
-//     const [rows] = await conn.query('SELECT * FROM Users WHERE user_id = ?', [req.params.id]);
-//     conn.release();
-//     if (rows.length === 0) {
-//         return res.status(404).send('Usuario no encontrado');
-//     }
-//     res.json(rows[0]);
-// });
 
 // // DELETE user by id
 // router.delete('/user/:id', async (req, res) => {
