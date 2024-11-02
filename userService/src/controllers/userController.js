@@ -8,13 +8,19 @@ router.get("/user", async (req, res) => {
     res.json(result);
 });
 
-// // GET user by id
+// GET user by id
 router.get('/user/:id', async (req, res) => {
     const result = await userModel.getUserById(req.params.id);
     if (result.length === 0) {
         return res.status(404).send('Usuario no encontrado');
     }
     res.json(result[0]);
+});
+
+// POST create user
+router.post('/user', async (req, res) => {
+    const result = await userModel.createUser(req.body);
+    res.json(result);
 });
 
 // // // CREATE user
