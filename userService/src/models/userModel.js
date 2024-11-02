@@ -1,4 +1,4 @@
-const e = require("express");
+const
 const mysql = require("mysql2/promise");
 
 const DB_HOST_USER = process.env.DB_HOST_USER || "localhost";

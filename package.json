@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start-users": "node userService/src/index.js",
-    "dev-users": "nodemon userService/src/index.js"
+    "dev-users": "nodemon userService/src/index.js",
+    "start-teams": "node teamService/src/index.js",
+    "dev-teams": "nodemon teamService/src/index.js"
   },
   "author": "nicksiuxs",
   "license": "ISC",
