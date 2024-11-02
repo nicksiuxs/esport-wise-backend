@@ -1,3 +1,4 @@
+const e = require("express");
 const mysql = require("mysql2/promise");
 
 const DB_HOST_USER = process.env.DB_HOST_USER || "localhost";
@@ -81,4 +82,21 @@ async function updateUser(updatedUser, id) {
     return rows[0];
 }
 
-module.exports = { getUsers, getUserById, createUser, updateUser };
+/**
+ * Deletes a user from the database by their ID.
+ * @param {number} id - The ID of the user to delete.
+ * @returns {Promise<Object|string>} - Returns the deleted user object if successful, or "User not found" if no user was deleted.
+ */
+async function deleteUser(id) {
+    const [user] = await connection.query('SELECT * FROM users WHERE id = ?', [id]);
+
+    const [result] = await connection.query('DELETE FROM users WHERE id = ?', [id]);
+
+    if (result.affectedRows > 0) {
+        return user[0];
+    }
+
+    return "User not found";
+}
+
+module.exports = { getUsers, getUserById, createUser, updateUser, deleteUser };
