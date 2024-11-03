@@ -48,8 +48,8 @@ async function getUserById(id) {
 async function createUser(user) {
 
     const [result] = await connection.query(
-        'INSERT INTO users (name, lastname, birthdate, email,  username, password, role_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [user.name, user.lastname, user.birthdate, user.email, user.username, user.password, user.role_id]
+        'INSERT INTO users (name, lastname, birthdate, email,  username, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [user.name, user.lastname, user.birthdate, user.email, user.username, user.password, user.role]
     );
 
     const [rows] = await connection.query('SELECT * FROM Users WHERE id = ?', [result.insertId]);
@@ -72,8 +72,8 @@ async function createUser(user) {
  */
 async function updateUser(updatedUser, id) {
     const [result] = await connection.query(
-        'UPDATE users SET name=?, lastname=?, birthdate=?, email=?, username=?, password=?, role_id=? WHERE id=?',
-        [updatedUser.name, updatedUser.lastname, updatedUser.birthdate, updatedUser.email, updatedUser.username, updatedUser.password, updatedUser.role_id, id]
+        'UPDATE users SET name=?, lastname=?, birthdate=?, email=?, username=?, password=?, role=? WHERE id=?',
+        [updatedUser.name, updatedUser.lastname, updatedUser.birthdate, updatedUser.email, updatedUser.username, updatedUser.password, updatedUser.role, id]
     );
 
     const [rows] = await connection.query('SELECT * FROM users WHERE id = ?', [id]);

@@ -41,13 +41,4 @@ router.delete('/user/:id', async (req, res) => {
     res.json(result);
 });
 
-// // DELETE user by id
-// router.delete('/user/:id', async (req, res) => {
-//     // TODO ADD VALIDATIONS TO DELETE USER
-//     const conn = await pool.getConnection();
-//     const [rows] = await conn.query('DELETE FROM users WHERE user_id = ?', [req.params.id]);
-//     conn.release();
-//     res.json(rows);
-// });
-
 module.exports = router;
