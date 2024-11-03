@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const teamController = require("./controllers/teamController");
@@ -5,6 +6,7 @@ const teamController = require("./controllers/teamController");
 const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
+
 
 app.use(teamController);
 

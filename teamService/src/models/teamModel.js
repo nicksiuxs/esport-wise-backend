@@ -71,4 +71,17 @@ async function deleteTeam(id) {
     return "Team not found";
 }
 
-module.exports = { getTeams, getTeamById, createTeam, deleteTeam };
+
+async function addMember(player) {
+    const { team_id, user_id } = player;
+    const [result] = await connection.query(
+        "INSERT INTO team_members (team_id, user_id) VALUES (?, ?)",
+        [team_id, user_id]
+    );
+
+    const [rows] = await connection.query('SELECT * FROM team_members WHERE team_member_id = ?', [result.insertId]);
+
+    return rows[0];
+}
+
+module.exports = { getTeams, getTeamById, createTeam, deleteTeam, addMember };

@@ -1,5 +1,5 @@
 -- Crear la base de datos
-CREATE DATABASE esport_wise_team;
+CREATE DATABASE IF NOT EXISTS esport_wise_team;
 
 -- Usar la base de datos
 USE esport_wise_team;
@@ -28,9 +28,8 @@ CREATE TABLE Teams (
 -- Crear la tabla de Miembros de Equipo
 CREATE TABLE Team_Members (
     team_member_id INT PRIMARY KEY AUTO_INCREMENT,
-    team_id INT,
-    user_id INT,
-    rol INT NOT NULL,
+    team_id INT NOT NULL,
+    user_id INT NOT NULL,
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status ENUM('activo', 'inactivo') DEFAULT 'activo',
     FOREIGN KEY (team_id) REFERENCES Teams(id)
