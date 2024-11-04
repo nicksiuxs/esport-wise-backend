@@ -33,11 +33,17 @@ router.post("/team/member", async (req, res) => {
     const member = req.body;
     const url = `http://localhost:${process.env.PORT_USER}/user/${member.user_id}`;
 
-    const user = await axios.get(url);
-    console.log(user)
+    const response = await axios.get(url);
+    const user = response.data;
+
+    if (typeof user === 'string') {
+        res.json(user);
+        return;
+    }
+
     const result = await teamModel.addMember(req.body);
+    result.user = user;
     res.json(result);
-    res.json('holiii');
 });
 
 module.exports = router;
