@@ -28,7 +28,7 @@ router.delete("/team/:id", async (req, res) => {
     res.json(result);
 });
 
-
+// POST add member to team
 router.post("/team/member", async (req, res) => {
     const member = req.body;
     const url = `http://localhost:${process.env.PORT_USER}/user/${member.user_id}`;
