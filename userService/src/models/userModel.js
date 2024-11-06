@@ -18,7 +18,7 @@ const connection = mysql.createPool({
  * @returns {Promise<Array>} A promise that resolves to an array of user objects.
  */
 async function getUsers() {
-    const result = await connection.query("SELECT * FROM Users");
+    const result = await connection.query("SELECT * FROM users");
     return result[0];
 }
 
@@ -29,7 +29,7 @@ async function getUsers() {
  * @returns {Promise<Object>} A promise that resolves to the user object.
  */
 async function getUserById(id) {
-    const result = await connection.query('SELECT * FROM Users WHERE id = ?', id);
+    const result = await connection.query('SELECT * FROM users WHERE id = ?', id);
     return result[0];
 }
 
@@ -48,11 +48,11 @@ async function getUserById(id) {
 async function createUser(user) {
 
     const [result] = await connection.query(
-        'INSERT INTO Users (name, lastname, birthdate, email,  username, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO users (name, lastname, birthdate, email,  username, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)',
         [user.name, user.lastname, user.birthdate, user.email, user.username, user.password, user.role]
     );
 
-    const [rows] = await connection.query('SELECT * FROM Users WHERE id = ?', [result.insertId]);
+    const [rows] = await connection.query('SELECT * FROM users WHERE id = ?', [result.insertId]);
 
     return rows[0];
 }
@@ -89,7 +89,7 @@ async function updateUser(updatedUser, id) {
 async function deleteUser(id) {
     const [user] = await connection.query('SELECT * FROM users WHERE id = ?', [id]);
 
-    const [result] = await connection.query('DELETE FROM Users WHERE id = ?', [id]);
+    const [result] = await connection.query('DELETE FROM users WHERE id = ?', [id]);
 
     if (result.affectedRows > 0) {
         return user[0];
