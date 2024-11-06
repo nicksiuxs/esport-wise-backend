@@ -5,7 +5,7 @@ CREATE DATABASE IF NOT EXISTS esport_wise_user;
 USE esport_wise_user;
 
 -- Crear la tabla de Usuarios
-CREATE TABLE Users (
+CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
     lastname VARCHAR(50) NOT NULL,
