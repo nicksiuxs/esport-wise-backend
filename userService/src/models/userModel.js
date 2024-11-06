@@ -46,7 +46,7 @@ async function getUserById(id) {
  * @returns {Promise<Object>} The created user object.
  */
 async function createUser(user) {
-
+    console.log(user.birthdate)
     const [result] = await connection.query(
         'INSERT INTO users (name, lastname, birthdate, email,  username, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)',
         [user.name, user.lastname, user.birthdate, user.email, user.username, user.password, user.role]
