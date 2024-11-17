@@ -31,8 +31,8 @@ router.post("/login", [
         const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.SECRET_KEY, {
             expiresIn: '7d'
         });
-
-        res.status(200).json(createResponse("success", { token }, "User logged in successfully"));
+        delete user.password;
+        res.status(200).json(createResponse("success", { token, user }, "User logged in successfully"));
     } catch (error) {
         res.status(500).json(createResponse("error", null, error.message));
     }
