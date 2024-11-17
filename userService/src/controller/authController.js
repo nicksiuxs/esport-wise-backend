@@ -28,7 +28,6 @@ router.post("/login", [
             return res.status(401).json(createResponse("error", null, "Invalid password"));
         }
 
-        console.log(user);
         const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.SECRET_KEY, {
             expiresIn: '7d'
         });
