@@ -7,10 +7,7 @@ const router = Router();
 const userModel = require("../model/userModel");
 const { createResponse } = require("../../../utils/utils");
 
-const validRoles = ["admin", "user"];
-
-
-router.use(verifyToken);
+const validRoles = ['admin', 'manager', 'player', 'coach', 'staff'];
 
 // POST a new user
 router.post("/user",
