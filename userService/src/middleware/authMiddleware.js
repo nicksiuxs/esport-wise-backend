@@ -46,9 +46,9 @@ const verifyAdminRole = (req, res, next) => {
         return next();
     }
 
-    if (req.userRole !== 'admin') {
-        return res.status(403).json(createResponse("error", null, "Access denied. Admins only can create user."));
-    }
+    // if (req.userRole !== 'admin') {
+    //     return res.status(403).json(createResponse("error", null, "Access denied. Admins only can create user."));
+    // }
     next();
 };
 

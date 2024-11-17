@@ -42,8 +42,8 @@ async function createUser(newUser) {
         newUser.password = hashedPassword;
 
         const [result] = await connection.query(
-            "INSERT INTO users (full_name, username, password, role) VALUES (?, ?, ?, ?)",
-            [newUser.full_name, newUser.username, newUser.password, newUser.role]
+            "INSERT INTO users (full_name, birthdate, username, email, password, role) VALUES (?, ?, ?, ?, ?, ?)",
+            [newUser.full_name, newUser.birthdate, newUser.username, newUser.email, newUser.password, newUser.role]
         );
 
         return [{ id: result.insertId, ...newUser }];

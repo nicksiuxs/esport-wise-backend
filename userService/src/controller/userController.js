@@ -14,10 +14,11 @@ router.use(verifyToken);
 
 // POST a new user
 router.post("/user",
-    verifyAdminRole,
     [
         check("full_name").notEmpty().withMessage("Full name is required").isString().withMessage("Full name must be a string"),
+        check('birthdate').notEmpty().withMessage("Birth date is required").isDate({ format: 'YYYY-MM-DD' }).withMessage("Birth date must be a date"),
         check("username").notEmpty().withMessage("Username is required").isString().withMessage("Username must be a string"),
+        check("email").notEmpty().withMessage("Email is required").isEmail().withMessage("Email must be a valid email address"),
         check("password").notEmpty().withMessage("Password is required").isString().withMessage("Password must be a string"),
         check("role").notEmpty().withMessage("Role is required").isString().withMessage("Role must be a string").isIn(validRoles).withMessage(`Role must be one of the following: ${validRoles.join(", ")}`),
     ],
