@@ -10,14 +10,14 @@ const userModel = require("../model/userModel");
 const { createResponse } = require("../../../utils/utils");
 
 router.post("/login", [
-    check("username").notEmpty().withMessage("Username is required").isString().withMessage("Username must be a string"),
+    check("email").notEmpty().withMessage("Username is required").isEmail().withMessage("email must be a string"),
     check("password").notEmpty().withMessage("Password is required").isString().withMessage("Password must be a string"),
 ], async (req, res) => {
 
-    const { username, password } = req.body
+    const { email, password } = req.body
 
     try {
-        const user = await userModel.getUserByEmail(username, password);
+        const user = await userModel.getUserByEmail(email, password);
 
         if (!user) {
             return res.status(404).json(createResponse("error", null, "User not found"));
@@ -28,6 +28,7 @@ router.post("/login", [
             return res.status(401).json(createResponse("error", null, "Invalid password"));
         }
 
+        console.log(user);
         const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.SECRET_KEY, {
             expiresIn: '7d'
         });

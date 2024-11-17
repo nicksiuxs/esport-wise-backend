@@ -68,20 +68,19 @@ async function getUserById(id) {
 }
 
 /**
- * Log in a user by their username.
- * @param {string} username - The username of the user to log in.
+ * Log in a user by their email.
+ * @param {string} email - The email of the user to log in.
  * @returns {Promise<Object>} A promise that resolves to the user's data.
  * @throws {Error} If there is an error during the database query.
  */
-async function getUserByEmail(username) {
+async function getUserByEmail(email) {
     try {
-        const [result] = await connection.query("SELECT * FROM users WHERE username = ? ", [username]);
+        const [result] = await connection.query("SELECT * FROM users WHERE email = ? ", [email]);
         return result[0];
     } catch (error) {
         throw new Error(error.message);
     }
 }
-
 
 /**
  * Updates a user in the database by their ID.
