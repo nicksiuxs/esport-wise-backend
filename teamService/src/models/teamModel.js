@@ -74,7 +74,7 @@ async function createTeam(team) {
             [name, logo_url, manager_id, game_id]
         );
 
-        const [rows] = await connection.query('SELECT * FROM Teams WHERE id = ?', [result.insertId]);
+        const [rows] = await connection.query('SELECT * FROM teams WHERE id = ?', [result.insertId]);
 
         return rows[0];
     } catch (error) {
