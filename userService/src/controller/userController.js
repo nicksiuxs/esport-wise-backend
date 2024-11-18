@@ -108,4 +108,24 @@ router.delete("/user/:id",
         }
     });
 
+router.post("/users",
+    [
+        check("user_ids").isArray().withMessage("User Ids must be an array of integers"),
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json(createResponse("error", null, errors.array()));
+        }
+
+        const ids = req.body.user_ids;
+
+        try {
+            const users = await userModel.getUsersByIds(ids);
+            res.status(200).json(createResponse("success", users, "Users retrieved successfully"));
+        } catch (error) {
+            res.status(500).json(createResponse("error", null, error.message));
+        }
+    });
+
 module.exports = router;

@@ -1,9 +1,11 @@
 const { Router } = require("express");
-const axios = require('axios');
+
 const { createResponse } = require("../../../utils/utils");
 
 const router = Router();
 const teamModel = require("../models/teamModel");
+const { axiosUser } = require("../../../utils/axiosInstance");
+
 
 // GET all teams
 router.get("/team", async (req, res) => {
@@ -44,35 +46,49 @@ router.post("/team", async (req, res) => {
 
 // DELETE team by ID   
 router.delete("/team/:id", async (req, res) => {
-    const result = await teamModel.deleteTeam(req.params.id);
-    res.json(result);
+    try {
+        const result = await teamModel.deleteTeam(req.params.id);
+        res.status(200).json(createResponse("success", result, "Team deleted successfully"));
+    } catch (error) {
+        res.status(500).json(createResponse("error", null, error.message));
+    }
+
 });
 
 // POST add member to team
 router.post("/team/member", async (req, res) => {
-    const member = req.body;
-    const url = `http://localhost:${process.env.PORT_USER}/user/${member.user_id}`;
+    try {
+        const member = req.body;
+        const response = await axiosUser.get(`/user/${member.user_id}`);
+        const user = response.data;
 
-    const response = await axios.get(url);
-    const user = response.data;
+        if (typeof user === 'string') {
+            res.json(user);
+            return;
+        }
 
-    if (typeof user === 'string') {
-        res.json(user);
-        return;
+        const result = await teamModel.addMember(req.body);
+        result.user = user.data;
+        res.status(200).json(createResponse("success", result, "Member added successfully"));
+    } catch (error) {
+        res.status(500).json(createResponse("error", null, error.message));
     }
 
-    const result = await teamModel.addMember(req.body);
-    result.user = user;
-    res.json(result);
 });
 
 // GET members of a tema
 router.get("/team/:id/members", async (req, res) => {
     try {
-        const result = await teamModel.getMembers(req.params.id);
-        res.json(result);
-    } catch (error) {
+        const team = await teamModel.getTeamById(req.params.id);
+        const members = await teamModel.getMembers(req.params.id);
+        const membersId = members.map(member => member.user_id);
 
+        const response = await axiosUser.post("/users", { user_ids: membersId });
+
+        const result = { team: team[0], members: response.data.data }
+        res.status(200).json(createResponse("success", result, "Members fetched successfully"));
+    } catch (error) {
+        res.status(500).json(createResponse("error", null, error.message));
     }
 });
 
