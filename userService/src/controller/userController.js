@@ -108,8 +108,6 @@ router.delete("/user/:id",
         }
     });
 
-module.exports = router;
-
 // PUT verify user data (only for managers)
 router.put("/user/:id/verify", verifyToken, async (req, res) => {
     const userId = req.params.id;
@@ -125,3 +123,25 @@ router.put("/user/:id/verify", verifyToken, async (req, res) => {
         res.status(500).json(createResponse("error", null, error.message));
     }
 });
+
+router.post("/users",
+    [
+        check("user_ids").isArray().withMessage("User Ids must be an array of integers"),
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json(createResponse("error", null, errors.array()));
+        }
+
+        const ids = req.body.user_ids;
+
+        try {
+            const users = await userModel.getUsersByIds(ids);
+            res.status(200).json(createResponse("success", users, "Users retrieved successfully"));
+        } catch (error) {
+            res.status(500).json(createResponse("error", null, error.message));
+        }
+    });
+
+module.exports = router;

@@ -68,6 +68,23 @@ async function getUserById(id) {
 }
 
 /**
+ * Retrieves users from the database by their IDs.
+ *
+ * @param {Array<number>} ids - An array of user IDs to retrieve.
+ * @returns {Promise<Array<Object>>} A promise that resolves to an array of user objects.
+ * @throws {Error} If there is an error during the database query.
+ */
+async function getUsersByIds(ids) {
+    try {
+        const placeholders = ids.map(() => '?').join(',');
+        const [rows] = await connection.query(`SELECT * FROM users WHERE id IN (${placeholders})`, ids);
+        return rows;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+/**
  * Log in a user by their email.
  * @param {string} email - The email of the user to log in.
  * @returns {Promise<Object>} A promise that resolves to the user's data.
@@ -132,5 +149,4 @@ async function verifyUserById(id) {
     return updatedUser[0];
 }
 
-
-module.exports = { getUsers, createUser, getUserById, getUserByEmail, updateUserById, deleteUserById, verifyUserById };
+module.exports = { getUsers, createUser, getUserById, getUsersByIds, getUserByEmail, updateUserById, deleteUserById, verifyUserById };
