@@ -19,8 +19,13 @@ const connection = mysql.createPool({
  * @returns {Promise<Array>} A promise that resolves to an array of team objects.
  */
 async function getTeams() {
-    const result = await connection.query("SELECT * FROM teams");
-    return result[0];
+    try {
+        const result = await connection.query("SELECT * FROM teams");
+        return result[0];
+    } catch (error) {
+        throw new Error(error.message);
+    }
+
 }
 
 /**
@@ -29,8 +34,12 @@ async function getTeams() {
  * @returns {Promise<Object>} A promise that resolves to the team object.
  */
 async function getTeamById(id) {
-    const result = await connection.query("SELECT * FROM teams WHERE id = ?", [id]);
-    return result[0];
+    try {
+        const result = await connection.query("SELECT * FROM teams WHERE id = ?", [id]);
+        return result[0];
+    } catch (error) {
+        throw new Error(error.message);
+    }
 }
 
 /**
@@ -43,15 +52,19 @@ async function getTeamById(id) {
  * @returns {Promise<Object>} The result of the database query.
  */
 async function createTeam(team) {
-    const { name, logo_url, manager_id, game_id } = team;
-    const [result] = await connection.query(
-        "INSERT INTO teams (name, logo_url, manager_id, game_id) VALUES (?, ?, ?, ?)",
-        [name, logo_url, manager_id, game_id]
-    );
+    try {
+        const { name, logo_url, manager_id, game_id } = team;
+        const [result] = await connection.query(
+            "INSERT INTO teams (name, logo_url, manager_id, game_id) VALUES (?, ?, ?, ?)",
+            [name, logo_url, manager_id, game_id]
+        );
 
-    const [rows] = await connection.query('SELECT * FROM Teams WHERE id = ?', [result.insertId]);
+        const [rows] = await connection.query('SELECT * FROM Teams WHERE id = ?', [result.insertId]);
 
-    return rows[0];
+        return rows[0];
+    } catch (error) {
+        throw new Error(error.message);
+    }
 }
 
 /**
@@ -60,28 +73,61 @@ async function createTeam(team) {
  * @returns {Promise<Object|string>} - Returns the deleted team object if successful, or a "Team not found" message if no team was deleted.
  */
 async function deleteTeam(id) {
-    const [team] = await connection.query('SELECT * FROM teams WHERE id = ?', [id]);
+    try {
+        const [team] = await connection.query('SELECT * FROM teams WHERE id = ?', [id]);
 
-    const [result] = await connection.query('DELETE FROM teams WHERE id = ?', [id]);
+        const [result] = await connection.query('DELETE FROM teams WHERE id = ?', [id]);
 
-    if (result.affectedRows > 0) {
-        return team[0];
+        if (result.affectedRows > 0) {
+            return team[0];
+        }
+
+        return "Team not found";
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+/**
+ * Adds a new member to the team.
+ * @param {Object} player - The player object containing team and user information.
+ * @param {number} player.team_id - The ID of the team.
+ * @param {number} player.user_id - The ID of the user.
+ * @returns {Promise<Object>} The newly added team member.
+ * @throws {Error} If there is an error during the database query.
+ */
+async function addMember(player) {
+    try {
+        const { team_id, user_id } = player;
+        const [result] = await connection.query(
+            "INSERT INTO team_members (team_id, user_id) VALUES (?, ?)",
+            [team_id, user_id]
+        );
+
+        const [rows] = await connection.query('SELECT * FROM team_members WHERE team_member_id = ?', [result.insertId]);
+
+        return rows[0];
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+/**
+ * Retrieves the members of a team based on the provided team ID.
+ * @async
+ * @function getMembers
+ * @param {number} team_id - The ID of the team whose members are to be retrieved.
+ * @returns {Promise<Array>} A promise that resolves to an array of team members.
+ * @throws {Error} If there is an error during the database query.
+ */
+async function getMembers(team_id) {
+    try {
+        const [result] = await connection.query('SELECT * FROM team_members WHERE team_id = ?', [team_id]);
+        return result;
+    } catch (error) {
+        throw new Error(error.message);
     }
 
-    return "Team not found";
 }
 
-
-async function addMember(player) {
-    const { team_id, user_id } = player;
-    const [result] = await connection.query(
-        "INSERT INTO team_members (team_id, user_id) VALUES (?, ?)",
-        [team_id, user_id]
-    );
-
-    const [rows] = await connection.query('SELECT * FROM team_members WHERE team_member_id = ?', [result.insertId]);
-
-    return rows[0];
-}
-
-module.exports = { getTeams, getTeamById, createTeam, deleteTeam, addMember };
+module.exports = { getTeams, getTeamById, createTeam, deleteTeam, addMember, getMembers };

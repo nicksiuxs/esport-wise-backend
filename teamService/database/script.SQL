@@ -32,5 +32,6 @@ CREATE TABLE Team_Members (
     user_id INT NOT NULL,
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status ENUM('activo', 'inactivo') DEFAULT 'activo',
-    FOREIGN KEY (team_id) REFERENCES Teams(id)
+    FOREIGN KEY (team_id) REFERENCES Teams(id),
+    UNIQUE (team_id, user_id)
 );
