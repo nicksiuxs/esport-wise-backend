@@ -4,7 +4,6 @@ CREATE DATABASE IF NOT EXISTS esport_wise_tournament;
 -- Use database
 USE esport_wise_tournament;
 
--- Create tournaments table
 CREATE TABLE Tournaments (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
@@ -12,7 +11,8 @@ CREATE TABLE Tournaments (
     start_date DATE NOT NULL,
     end_date DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (game_id) REFERENCES Games(id) -- Add this foreign key
 );
 
 -- Create team-tournament relation table

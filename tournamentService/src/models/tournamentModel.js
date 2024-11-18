@@ -60,9 +60,43 @@ async function getTournaments() {
     return rows;
 }
 
+async function addGame(game) {
+    const { id, game_name } = game;
+
+    try {
+        console.log("Adding Game:", game); // Log the game details
+
+        let result;
+
+        if (id) {
+            // Insert with specified game_id
+            result = await connection.query(
+                "INSERT INTO esport_wise_team.Games (id, game_name) VALUES (?, ?)",
+                [id, game_name]
+            );
+        } else {
+            // Insert without specifying game_id (auto-increment)
+            result = await connection.query(
+                "INSERT INTO esport_wise_team.Games (game_name) VALUES (?)",
+                [game_name]
+            );
+        }
+
+        const [rows] = await connection.query(
+            "SELECT * FROM esport_wise_team.Games WHERE id = ?",
+            [result[0].insertId || game_id]
+        );
+        return rows[0];
+    } catch (error) {
+        console.error("Error in addGame:", error.message);
+        throw new Error(error.message || "Database error while adding game");
+    }
+}
+
 module.exports = {
     createTournament,
     registerTeamInTournament,
     recordTeamPosition,
     getTournaments,
+    addGame,
 };

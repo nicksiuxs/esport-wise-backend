@@ -7,7 +7,9 @@
     "start-users": "node userService/src/index.js",
     "dev-users": "nodemon userService/src/index.js",
     "start-teams": "node teamService/src/index.js",
-    "dev-teams": "nodemon teamService/src/index.js"
+    "dev-teams": "nodemon teamService/src/index.js",
+    "start-tournament": "node tournamentService/src/index.js",
+    "dev-tournament": "nodemon tournamentService/src/index.js"
   },
   "author": "nicksiuxs",
   "license": "ISC",
