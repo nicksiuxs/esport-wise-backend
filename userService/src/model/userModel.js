@@ -143,4 +143,10 @@ async function deleteUserById(id) {
     }
 }
 
-module.exports = { getUsers, createUser, getUserById, getUsersByIds, getUserByEmail, updateUserById, deleteUserById };
+async function verifyUserById(id) {
+    await connection.query("UPDATE users SET verified = TRUE WHERE id = ?", [id]);
+    const [updatedUser] = await connection.query("SELECT * FROM users WHERE id = ?", [id]);
+    return updatedUser[0];
+}
+
+module.exports = { getUsers, createUser, getUserById, getUsersByIds, getUserByEmail, updateUserById, deleteUserById, verifyUserById };

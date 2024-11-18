@@ -21,8 +21,7 @@ CREATE TABLE Teams (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     manager_id INT,
-    game_id INT NOT NULL,
-    FOREIGN KEY (game_id) REFERENCES Games(id)
+    game_id INT NOT NULL, FOREIGN KEY (game_id) REFERENCES Games(id)
 );
 
 -- Crear la tabla de Miembros de Equipo
@@ -30,6 +29,7 @@ CREATE TABLE Team_Members (
     team_member_id INT PRIMARY KEY AUTO_INCREMENT,
     team_id INT NOT NULL,
     user_id INT NOT NULL,
+    role ENUM('player', 'coach', 'staff') DEFAULT 'player',
     joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status ENUM('activo', 'inactivo') DEFAULT 'activo',
     FOREIGN KEY (team_id) REFERENCES Teams(id),
