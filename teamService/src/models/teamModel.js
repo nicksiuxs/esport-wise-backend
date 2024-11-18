@@ -43,6 +43,21 @@ async function getTeamById(id) {
 }
 
 /**
+ * Asynchronous function to retrieve team information about a user.
+ * @param {number} user_id - The ID of the user whose team members are to be retrieved.
+ * @returns {Promise<Array>} - A promise that resolves to an array of team members.
+ * @throws {Error} - Throws an error if the database query fails.
+ */
+async function getMyTeam(user_id) {
+    try {
+        const [result] = await connection.query('SELECT * FROM team_members WHERE user_id = ?', [user_id]);
+        return result;
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+/**
  * Creates a new team in the database.
  * @param {Object} team - The team object containing team details.
  * @param {string} team.name - The name of the team.
@@ -130,4 +145,4 @@ async function getMembers(team_id) {
 
 }
 
-module.exports = { getTeams, getTeamById, createTeam, deleteTeam, addMember, getMembers };
+module.exports = { getTeams, getTeamById, getMyTeam, createTeam, deleteTeam, addMember, getMembers };
