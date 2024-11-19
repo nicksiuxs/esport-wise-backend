@@ -82,7 +82,7 @@ router.get('/my-team/:id', async (req, res) => {
         console.log('myTeam >>', myTeam);
         const team = await teamModel.getTeamById(myTeam[0].team_id);
         console.log('team >>', team);
-        const members = await teamModel.getMembers(req.params.id);
+        const members = await teamModel.getMembers(myTeam[0].team_id);
         console.log('members >>', members);
         const membersId = members.map(member => member.user_id);
         console.log('membersId >>', membersId);
