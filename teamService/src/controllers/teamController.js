@@ -97,12 +97,15 @@ router.get('/my-team/:id', async (req, res) => {
 // GET members of a tema
 router.get("/team/:id/members", async (req, res) => {
     try {
+        console.log('req.params.id >>', req.params.id);
         const team = await teamModel.getTeamById(req.params.id);
+        console.log("team >>", team);
         const members = await teamModel.getMembers(req.params.id);
+        console.log('members >>', members);
         const membersId = members.map(member => member.user_id);
-
+        console.log('membersId >>', membersId);
         const response = await axiosUser.post("/users", { user_ids: membersId });
-
+        console.log('response >>', response.data.data);
         const result = { team: team[0], members: response.data.data }
         res.status(200).json(createResponse("success", result, "Members fetched successfully"));
     } catch (error) {
