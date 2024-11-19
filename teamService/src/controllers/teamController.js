@@ -79,13 +79,15 @@ router.post("/team/member", async (req, res) => {
 router.get('/my-team/:id', async (req, res) => {  
     try {
         const myTeam = await teamModel.getMyTeam(req.params.id);
-
+        console.log('myTeam >>', myTeam);
         const team = await teamModel.getTeamById(myTeam[0].team_id);
+        console.log('team >>', team);
         const members = await teamModel.getMembers(req.params.id);
+        console.log('members >>', members);
         const membersId = members.map(member => member.user_id);
-
+        console.log('membersId >>', membersId);
         const response = await axiosUser.post("/users", { user_ids: membersId });
-
+        console.log('response >>', response.data.data);
         const result = { team: team[0], members: response.data.data }
 
         res.status(200).json(createResponse("success", result, "My team fetched successfully"));
